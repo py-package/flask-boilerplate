@@ -9,6 +9,9 @@ db = Orator()
 
 def factory(config=DevelopmentConfig) -> Flask:
     app = Flask(__name__)
+
+    app.template_folder = 'views'
+
     # load application configuration from config
     app.config.from_object(config)
 
@@ -19,4 +22,14 @@ def factory(config=DevelopmentConfig) -> Flask:
     db.init_app(app)
     db.app = app
 
+    register_blueprints(app)
+
     return app
+
+
+def register_blueprints(app):
+    from routes.web import web_bp
+    from routes.api import api_bp
+
+    app.register_blueprint(web_bp)
+    app.register_blueprint(api_bp)
