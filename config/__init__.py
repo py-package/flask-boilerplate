@@ -17,12 +17,17 @@ class Config(object):
 class DevelopmentConfig(Config):
     DEBUG = True
     MAIL_SERVER = os.getenv('MAIL_SERVER')
-    MAIL_PORT = os.getenv('MAIL_PORT')
+    MAIL_PORT = os.getenv('MAIL_PORT', 587)
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
-    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
-    MAIL_USE_SSL = os.getenv('MAIL_USE_SSL')
+    MAIL_USE_TLS = bool(os.getenv('MAIL_USE_TLS', True))
+    MAIL_USE_SSL = bool(os.getenv('MAIL_USE_SSL', False))
+    MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER')
+
     ORATOR_DATABASES = database
+
+    CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379')
+    RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND', 'redis://localhost:6379')
 
 
 # Create the testing config
