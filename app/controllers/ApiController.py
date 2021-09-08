@@ -13,7 +13,7 @@ class ApiController():
         message_data = {
             'subject': 'Hello from the flask app!',
             'body': 'This email was sent asynchronously using Celery.',
-            'recipients': "companion.krish@gmail.com",
+            'recipients': "",
 
         }
         send_test_job.apply_async(args=[message_data])
