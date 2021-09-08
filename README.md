@@ -9,6 +9,7 @@ A production-grade flask application that you can start your projects without he
 - [x] Celery for background jobs
 - [x] Managed Routing using Blueprints
 - [x] Data and Route Caching
+- [x] File Storage using Depot
 
 **Running Application**
 
