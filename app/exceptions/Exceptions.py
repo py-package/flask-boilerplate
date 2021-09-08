@@ -1,0 +1,2 @@
+class InvalidSecretKey(Exception):
+    pass

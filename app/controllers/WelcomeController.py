@@ -1,6 +1,8 @@
+from app.services import sign
 from flask import render_template, request
 from app import cache
 from app.services.Storage import Storage
+import json
 
 
 class WelcomeController():
@@ -15,6 +17,10 @@ class WelcomeController():
 
     @staticmethod
     def about():
+        encrypted = sign().sign(json.dumps({
+            "name": "Yubaraj Shrestha"
+        }))
+        print(encrypted)
         return render_template("pages/about.html")
 
     @staticmethod
