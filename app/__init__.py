@@ -3,10 +3,12 @@ from flask import Flask, render_template
 from flask_mail import Mail
 from flask_orator import Orator
 from celery import Celery
+from flask_caching import Cache
 
 mail = Mail()
 db = Orator()
 celery = Celery(__name__, broker=DevelopmentConfig.CELERY_BROKER_URL, result_backend=DevelopmentConfig.RESULT_BACKEND)
+cache = Cache()
 
 
 def factory(config=DevelopmentConfig) -> Flask:
@@ -16,6 +18,12 @@ def factory(config=DevelopmentConfig) -> Flask:
 
     # load application configuration from config
     app.config.from_object(config)
+
+    # initialize cache
+    cache_config = {
+        'CACHE_TYPE': 'RedisCache',
+    }
+    cache.init_app(app, config=cache_config)
 
     # initialize mail
     mail.init_app(app)
