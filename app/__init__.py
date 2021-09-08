@@ -4,6 +4,7 @@ from flask_mail import Mail
 from flask_orator import Orator
 from celery import Celery
 from flask_caching import Cache
+from depot.manager import DepotManager
 
 mail = Mail()
 db = Orator()
@@ -32,6 +33,12 @@ def factory(config=DevelopmentConfig) -> Flask:
     # initialize database
     db.init_app(app)
     db.app = app
+
+    # configure depotmanager
+    DepotManager.configure(name='default', config={
+        'depot.storage_path': 'storage/public'
+    }, prefix='depot.')
+    app.wsgi_app = DepotManager.make_middleware(app.wsgi_app, mountpoint="/public")
 
     # initialize celery
     celery.conf.update(app.config)

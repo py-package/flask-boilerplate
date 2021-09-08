@@ -1,2 +1,4 @@
 venv
+virtualenv
 .env
+storage/public/*
