@@ -1,7 +1,6 @@
-from flask import Blueprint
+from routes import create_router
 from app.controllers.ApiController import ApiController
 
 
-api_bp = Blueprint('api', __name__, url_prefix='/api')
-
-api_bp.route('/foo', methods=['GET'])(ApiController.index)
+router = create_router('api', '/api')
+router.route('/foo', methods=['GET'])(ApiController.index)

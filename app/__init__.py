@@ -35,11 +35,11 @@ def factory(config=DevelopmentConfig) -> Flask:
 
 
 def register_blueprints(app):
-    from routes.web import web_bp
-    from routes.api import api_bp
+    from routes.web import router as web_router
+    from routes.api import router as api_router
 
-    app.register_blueprint(web_bp)
-    app.register_blueprint(api_bp)
+    app.register_blueprint(web_router)
+    app.register_blueprint(api_router)
 
 
 def register_logging(app) -> None:

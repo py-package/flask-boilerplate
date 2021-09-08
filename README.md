@@ -1,5 +1,14 @@
 ### Flask Boilerplate
 
+A production-grade flask application that you can start your projects without hesitation and without worrying about managing the project structure.
+
+
+**Features**
+- [x] Factory Pattern
+- [x] Orator ORM module
+- [x] Celery for background jobs
+- [x] Managed Routing using Blueprints
+
 **Running Application**
 
 First of all copy `.env.example` and create new `.env` file. And then,
@@ -39,3 +48,9 @@ python db.py
 **Celery**
 
 For task queues and heavy background services, **[Celery](https://docs.celeryproject.org/en/stable/getting-started/introduction.html)** is used. **[Redis](https://redis.io/)** has been used as broker.
+
+```sh
+# Start celery worker
+
+celery -A celery_worker.celery worker --pool=solo --loglevel=info
+```

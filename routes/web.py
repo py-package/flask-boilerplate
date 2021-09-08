@@ -1,7 +1,6 @@
-from flask import Blueprint
+from routes import create_router
 from app.controllers.WelcomeController import WelcomeController
 
 
-web_bp = Blueprint('web', __name__)
-
-web_bp.route('/', methods=['GET'])(WelcomeController.index)
+router = create_router('web', '/')
+router.route('/', methods=['GET'])(WelcomeController.index)
