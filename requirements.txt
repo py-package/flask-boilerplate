@@ -11,3 +11,4 @@ redis==3.5.3
 Flask-Caching==1.10.1
 filedepot==0.8.0
 cryptography==3.4.8
+pytest==6.2.5
