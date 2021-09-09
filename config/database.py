@@ -6,7 +6,7 @@ dotenv_path = os.path.join(basedir, '.env')
 load_dotenv(dotenv_path)
 
 database = {
-    'default': 'mysql',
+    'default': os.getenv('DATABASE'),
 
     'mysql': {
         'driver': 'mysql',
@@ -16,5 +16,11 @@ database = {
         'database': os.getenv('DB_DATABASE'),
     },
 
-    'postgres': {},
+    'postgres': {
+        'driver': 'postgres',
+        'host': os.getenv('DB_HOST', 'localhost'),
+        'user': os.getenv('DB_USER', 'root'),
+        'password': os.getenv('DB_PASSWORD', ''),
+        'database': os.getenv('DB_DATABASE'),
+    },
 }

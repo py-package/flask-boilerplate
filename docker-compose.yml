@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    command: gunicorn -w 4 wsgi:server -t 90 -b 0.0.0.0:5000 --reload
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+      - redis_db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+  redis_db:
+    image: redis:alpine
+    command: redis-server
+    volumes:
+      - $PWD/redis-data:/var/lib/redis
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_MASTER_PASSWORD=
+    ports:
+      - "6379:6379"
+volumes:
+  postgres_data:
+  redis_data:
+    driver: local

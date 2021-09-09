@@ -23,6 +23,7 @@ def factory(config=DevelopmentConfig) -> Flask:
     # initialize cache
     cache_config = {
         'CACHE_TYPE': 'RedisCache',
+        'CACHE_REDIS_HOST': config.REDIS_HOST,
     }
     cache.init_app(app, config=cache_config)
 
