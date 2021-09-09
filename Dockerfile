@@ -18,7 +18,7 @@ RUN pip install openpyxl
 COPY ./.env.example /usr/src/app/.env
 COPY ./requirements.txt /usr/src/app/requirements.txt
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --no-cache-dir
 
 # copy project
 COPY . /usr/src/app/

@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   web:
+    container_name: web
     build: .
     command: gunicorn -w 4 wsgi:server -t 90 -b 0.0.0.0:5000 --reload
     volumes:
@@ -12,6 +13,7 @@ services:
       - redis_db
 
   db:
+    container_name: database
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -21,6 +23,7 @@ services:
       - POSTGRES_DB=postgres
 
   redis_db:
+    container_name: redis
     image: redis:alpine
     command: redis-server
     volumes:
