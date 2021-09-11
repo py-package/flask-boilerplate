@@ -1,15 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layouts/base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask BoilerPlate</title>
-</head>
+{% block content %}
 
-<body>
-    Contact Page!
-</body>
+<div class="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+    <div class="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
+        <h1 class="font-bold text-center text-2xl">Contact Page!</h1>
+        <div class="text-center">
+            <a href="/" class="font-bold text-xs text-center underline cursor-pointer">Home Page</a>
+            |
+            <a href="/about" class="font-bold text-xs text-center underline cursor-pointer">About Page</a>
+        </div>
+    </div>
+</div>
 
-</html>
+{% endblock %}

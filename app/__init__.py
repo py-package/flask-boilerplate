@@ -5,11 +5,13 @@ from flask_orator import Orator
 from celery import Celery
 from flask_caching import Cache
 from depot.manager import DepotManager
+from flask_login import LoginManager
 
 mail = Mail()
 db = Orator()
 celery = Celery(__name__, broker=DevelopmentConfig.CELERY_BROKER_URL, result_backend=DevelopmentConfig.RESULT_BACKEND)
 cache = Cache()
+login_manager = LoginManager()
 
 
 def factory(config=DevelopmentConfig) -> Flask:
@@ -35,6 +37,9 @@ def factory(config=DevelopmentConfig) -> Flask:
     db.init_app(app)
     db.app = app
 
+    # initialize login_manager
+    register_login_manager(app)
+
     # configure depotmanager
     DepotManager.configure(name='default', config={
         'depot.storage_path': 'storage/public'
@@ -46,14 +51,33 @@ def factory(config=DevelopmentConfig) -> Flask:
 
     register_blueprints(app)
     register_logging(app)
+    register_error_handlers(app)
 
     return app
 
 
+def register_login_manager(app):
+    login_manager.login_view = 'auth.login_page'
+    login_manager.init_app(app)
+    login_manager.session_protection = 'strong'
+    login_manager.login_message = 'Please login to access this page.'
+    login_manager.login_message_category = 'info'
+    login_manager.needs_refresh_message = 'To protect your account, please reauthenticate to access this page.'
+    login_manager.needs_refresh_message_category = 'info'
+    login_manager.refresh_view = 'login'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        from app.models.User import User
+        return User.find(user_id)
+
+
 def register_blueprints(app):
+    from routes.auth import router as auth_router
     from routes.web import router as web_router
     from routes.api import router as api_router
 
+    app.register_blueprint(auth_router)
     app.register_blueprint(web_router)
     app.register_blueprint(api_router)
 
@@ -86,24 +110,39 @@ def register_error_handlers(app) -> None:
     # 400 - Bad Request
     @app.errorhandler(400)
     def bad_request(e):
-        return render_template('errors/400.html'), 400
+        return render_template('errors/400.html', context={
+            "title": 400,
+            "message": "Bad Request"
+        }), 400
 
     # 403 - Forbidden
     @app.errorhandler(403)
     def forbidden(e):
-        return render_template('errors/403.html'), 403
+        return render_template('errors/403.html', context={
+            "title": 403,
+            "message": "Forbidden"
+        }), 403
 
     # 404 - Page Not Found
     @app.errorhandler(404)
     def page_not_found(e):
-        return render_template('errors/404.html'), 404
+        return render_template('errors/404.html', context={
+            "title": 404,
+            "message": "Page not found"
+        }), 404
 
     # 405 - Method Not Allowed
     @app.errorhandler(405)
     def method_not_allowed(e):
-        return render_template('errors/405.html'), 405
+        return render_template('errors/405.html', context={
+            "title": 405,
+            "message": "Method Not Allowed"
+        }), 405
 
     # 500 - Internal Server Error
     @app.errorhandler(500)
     def server_error(e):
-        return render_template('errors/500.html'), 500
+        return render_template('errors/500.html', context={
+            "title": 500,
+            "message": "Internal Server Error"
+        }), 500

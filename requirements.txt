@@ -12,3 +12,6 @@ Flask-Caching==1.10.1
 filedepot==0.8.0
 cryptography==3.4.8
 pytest==6.2.5
+Flask-Login==0.5.0
+Flask-WTF==0.15.1
+email-validator==1.1.3
