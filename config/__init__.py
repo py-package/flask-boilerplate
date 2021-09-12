@@ -1,6 +1,6 @@
 import os
 
-from config.database import database
+from config.database import database, test_database
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__name__))
@@ -37,7 +37,11 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
-    ORATOR_DATABASES = database
+    ORATOR_DATABASES = test_database
+    CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+    RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+    REDIS_HOST = os.getenv('REDIS_HOST')
+    REDIS_PORT = os.getenv('REDIS_PORT')
 
 
 # create the production config

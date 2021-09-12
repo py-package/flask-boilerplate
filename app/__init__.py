@@ -1,4 +1,4 @@
-from config import DevelopmentConfig
+from config import DevelopmentConfig, TestingConfig
 from flask import Flask, render_template
 from flask_mail import Mail
 from flask_orator import Orator
@@ -12,6 +12,10 @@ db = Orator()
 celery = Celery(__name__, broker=DevelopmentConfig.CELERY_BROKER_URL, result_backend=DevelopmentConfig.RESULT_BACKEND)
 cache = Cache()
 login_manager = LoginManager()
+
+DepotManager.configure(name='default', config={
+    'depot.storage_path': 'storage/public'
+}, prefix='depot.')
 
 
 def factory(config=DevelopmentConfig) -> Flask:
@@ -41,11 +45,9 @@ def factory(config=DevelopmentConfig) -> Flask:
     # initialize login_manager
     register_login_manager(app)
 
-    # configure depotmanager
-    DepotManager.configure(name='default', config={
-        'depot.storage_path': 'storage/public'
-    }, prefix='depot.')
-    app.wsgi_app = DepotManager.make_middleware(app.wsgi_app, mountpoint="/public")
+    if config is not TestingConfig:
+        # configure depotmanager
+        app.wsgi_app = DepotManager.make_middleware(app.wsgi_app, mountpoint="/public")
 
     # initialize celery
     celery.conf.update(app.config)

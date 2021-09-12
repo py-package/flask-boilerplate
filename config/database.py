@@ -24,3 +24,12 @@ database = {
         'database': os.getenv('DB_DATABASE'),
     },
 }
+
+test_database = {
+    'default': 'sqlite',
+
+    'sqlite': {
+        'driver': 'sqlite',
+        'database': ':memory:',
+    },
+}
