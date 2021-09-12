@@ -3,3 +3,9 @@ virtualenv
 .env
 storage/public/*
 .vscode
+.idea
+.DS_Store
+redis.conf
+redis-data
+*.log
+.pytest_cache

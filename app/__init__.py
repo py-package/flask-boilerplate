@@ -27,7 +27,8 @@ def factory(config=DevelopmentConfig) -> Flask:
         'CACHE_TYPE': 'RedisCache',
         'CACHE_REDIS_HOST': config.REDIS_HOST,
     }
-    cache.init_app(app, config=cache_config)
+    # Enable to use Redis as cache backend
+    # cache.init_app(app, config=cache_config)
 
     # initialize mail
     mail.init_app(app)
@@ -57,7 +58,7 @@ def factory(config=DevelopmentConfig) -> Flask:
 
 
 def register_login_manager(app):
-    login_manager.login_view = 'auth.login_page'
+    login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
     login_manager.session_protection = 'strong'
     login_manager.login_message = 'Please login to access this page.'
@@ -91,7 +92,7 @@ def register_logging(app) -> None:
     app.logger.removeHandler(default_handler)
 
     # Create a file handler object
-    file_handler = RotatingFileHandler('flaskapp.log', maxBytes=16384, backupCount=20)
+    file_handler = RotatingFileHandler('storage/logs/flaskapp.log', maxBytes=16384, backupCount=20)
 
     # Set the logging level of the file handler object so that it logs INFO and up
     file_handler.setLevel(logging.INFO)
@@ -110,39 +111,44 @@ def register_error_handlers(app) -> None:
     # 400 - Bad Request
     @app.errorhandler(400)
     def bad_request(e):
-        return render_template('errors/400.html', context={
+        data = {
             "title": 400,
             "message": "Bad Request"
-        }), 400
+        }
+        return render_template('errors/400.html', **data), 400
 
     # 403 - Forbidden
     @app.errorhandler(403)
     def forbidden(e):
-        return render_template('errors/403.html', context={
+        data = {
             "title": 403,
             "message": "Forbidden"
-        }), 403
+        }
+        return render_template('errors/403.html', **data), 403
 
     # 404 - Page Not Found
     @app.errorhandler(404)
     def page_not_found(e):
-        return render_template('errors/404.html', context={
+        data = {
             "title": 404,
             "message": "Page not found"
-        }), 404
+        }
+        return render_template('errors/404.html', **data), 404
 
     # 405 - Method Not Allowed
     @app.errorhandler(405)
     def method_not_allowed(e):
-        return render_template('errors/405.html', context={
+        data = {
             "title": 405,
             "message": "Method Not Allowed"
-        }), 405
+        }
+        return render_template('errors/405.html', **data), 405
 
     # 500 - Internal Server Error
     @app.errorhandler(500)
     def server_error(e):
-        return render_template('errors/500.html', context={
+        data = {
             "title": 500,
             "message": "Internal Server Error"
-        }), 500
+        }
+        return render_template('errors/500.html', **data), 500

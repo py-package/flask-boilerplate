@@ -10,13 +10,13 @@ load_dotenv(dotenv_path)
 
 class Config(object):
     DEBUG = False
-    KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    TEMPLATES_AUTO_RELOAD = True
 
 
 # Create the development config
 class DevelopmentConfig(Config):
-    DEBUG = True
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    DEBUG = bool(os.getenv('DEBUG', False))
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT', 587)
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')

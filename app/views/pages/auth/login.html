@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-
+{% import "macros/form_input_validation.html" as form_input %}
 {% block content %}
 
 <div class="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
@@ -10,12 +10,18 @@
                 <form class="w-full" method="POST" action="/login">
                     {{ form.csrf_token }}
 
-                    {{ form.email.label(class_="font-semibold text-sm text-gray-600 pb-1 block") }}
-                    {{ form.email(class_="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full", autofocus="") }}
+                    {{ form_input.with_errors(form.email, class="border rounded px-3 py-2 mt-1 mb-5 text-sm w-full",
+                    autofocus="") }}
 
-                    {{ form.password.label(class_="font-semibold text-sm text-gray-600 pb-1 block") }}
-                    {{ form.password(class_="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full", autofocus="") }}
+                    {{ form_input.with_errors(form.password, class="border rounded px-3 py-2 mt-1 mb-5 text-sm w-full",
+                    autofocus="") }}
 
+                    {% if message %}
+                    <div class="text-red-600 text-xs mb-3 text-center">
+                        <strong class="font-bold">Whoops!</strong>
+                        <span class="block sm:inline">{{ message }}</span>
+                    </div>
+                    {% endif %}
                     <button type="submit"
                         class="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block">
                         <span class="inline-block mr-2">Login</span>

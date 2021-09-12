@@ -1,13 +1,16 @@
 from app.models.User import User
 from app.forms import ForgotPasswordForm, LoginForm
 from flask import render_template, redirect, request
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required
 
 
 class AuthController():
 
     @staticmethod
     def login():
+        """
+        Login page
+        """
         form = LoginForm()
         if request.method == 'GET':
             return render_template('pages/auth/login.html', title='Login', form=form)
@@ -24,7 +27,7 @@ class AuthController():
                     login_user(user)
                     return redirect('/home')
 
-            return render_template('pages/auth/login.html', title='Login', form=form, message="User not found!")
+            return render_template('pages/auth/login.html', title='Login', form=form, message="Invalid credentials!")
 
     def register():
         """
@@ -56,8 +59,21 @@ class AuthController():
 
     @login_required
     def profile():
-        return render_template('pages/auth/profile.html', title='Profile', user=current_user)
+        data = {
+            'title': 'Profile',
+        }
+        return render_template('pages/auth/profile.html', **data)
 
     @login_required
     def home():
-        return render_template('pages/auth/home.html', title='Home', user=current_user)
+        data = {
+            'title': 'Home',
+        }
+        return render_template('pages/auth/home.html', **data)
+
+    @login_required
+    def settings():
+        data = {
+            'title': 'Settings',
+        }
+        return render_template('pages/auth/settings.html', **data)

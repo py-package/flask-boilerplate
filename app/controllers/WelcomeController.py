@@ -6,15 +6,24 @@ class WelcomeController():
 
     @staticmethod
     def index():
-        return render_template("pages/index.html")
+        data = {
+            'title': 'Home Page',
+        }
+        return render_template("pages/index.html", **data)
 
     @staticmethod
     def about():
-        return render_template("pages/about.html")
+        data = {
+            'title': 'About Page',
+        }
+        return render_template("pages/about.html", **data)
 
     @staticmethod
     def contact():
-        return render_template("pages/contact.html")
+        data = {
+            'title': 'Contact Page',
+        }
+        return render_template("pages/contact.html", **data)
 
     @staticmethod
     def file_upload():

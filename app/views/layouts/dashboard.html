@@ -11,8 +11,16 @@
 </head>
 
 <body>
-    {% block content %}
-    {% endblock %}
+    <div class="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased relative bg-gray-50 text-gray-800">
+        {% include 'partials/navbar.html' %}
+        {% include 'partials/sidebar.html' %}
+        <main class="flex flex-col w-full min-h-screen flex-1 overflow-hidden pl-64">
+            <div class="content min-h-full">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </main>
+    </div>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </body>
 
