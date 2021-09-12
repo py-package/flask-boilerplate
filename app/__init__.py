@@ -31,8 +31,7 @@ def factory(config=DevelopmentConfig) -> Flask:
         'CACHE_TYPE': 'RedisCache',
         'CACHE_REDIS_HOST': config.REDIS_HOST,
     }
-    # Enable to use Redis as cache backend
-    # cache.init_app(app, config=cache_config)
+    cache.init_app(app, config=cache_config)
 
     # initialize mail
     mail.init_app(app)
