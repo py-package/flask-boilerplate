@@ -1,1 +1,1 @@
-gunicorn -w 4 wsgi:server -t 90 -b 0.0.0.0:5000 --reload
+gunicorn -w 4 wsgi:app -t 90 -b 0.0.0.0:5000 --reload
