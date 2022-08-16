@@ -3,7 +3,7 @@ services:
   web:
     container_name: web
     build: .
-    command: gunicorn -w 4 wsgi:server -t 90 -b 0.0.0.0:5000 --reload
+    command: gunicorn -w 4 wsgi:app -t 90 -b 0.0.0.0:5000 --reload
     volumes:
       - .:/usr/src/app/
     ports:

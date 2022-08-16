@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://banners.beyondco.de/Flask%20Boilerplate.png?theme=light&packageManager=Happy&packageName=Coding&pattern=charlieBrown&style=style_2&description=Production+ready+batteries+included+boilerplate.&md=1&showWatermark=1&fontSize=100px&images=adjustments&widths=50&heights=50">
+</p>
+
 ### Flask Boilerplate
 
 A production-grade flask application that you can start your projects without hesitation and without worrying about managing the project structure.
@@ -78,3 +82,7 @@ For task queues and heavy background services, **[Celery](https://docs.celerypro
 
 celery -A celery_worker.celery worker --pool=solo --loglevel=info
 ```
+
+## Contributions
+
+Contributions are welcome! If you have any questions or suggestions, please feel free to open an issue or create a pull request.
