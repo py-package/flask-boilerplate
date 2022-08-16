@@ -5,31 +5,28 @@ basedir = os.path.abspath(os.path.dirname(__name__))
 dotenv_path = os.path.join(basedir, '.env')
 load_dotenv(dotenv_path)
 
-database = {
-    'default': os.getenv('DATABASE'),
+DATABASE_URL = "sqlite:////tmp/:memory:"
+TEST_DATABASE_URL = "sqlite:////tmp/:memory:"
 
-    'mysql': {
-        'driver': 'mysql',
-        'host': os.getenv('DB_HOST', 'localhost'),
-        'user': os.getenv('DB_USER', 'root'),
-        'password': os.getenv('DB_PASSWORD', ''),
-        'database': os.getenv('DB_DATABASE'),
-    },
+password = os.environ.get('DB_PASSWORD', None)
 
-    'postgres': {
-        'driver': 'postgres',
-        'host': os.getenv('DB_HOST', 'localhost'),
-        'user': os.getenv('DB_USER', 'root'),
-        'password': os.getenv('DB_PASSWORD', ''),
-        'database': os.getenv('DB_DATABASE'),
-    },
-}
+# if password has '@' in it, it's a secret key
+if password is not None and '@' in password:
+    password = password.replace('@', '%40')
 
-test_database = {
-    'default': 'sqlite',
-
-    'sqlite': {
-        'driver': 'sqlite',
-        'database': ':memory:',
-    },
-}
+if os.getenv('DATABASE') == 'mysql':
+    DATABASE_URL = "mysql://{user}:{password}@{host}:{port}/{database}".format(
+        user=os.getenv('DB_USER', 'root'),
+        password=password,
+        host=os.getenv('DB_HOST', 'localhost'),
+        port=os.getenv('DB_PORT', '3306'),
+        database=os.getenv('DB_DATABASE'),
+    )
+elif os.getenv('DATABASE') == 'postgres':
+    DATABASE_URL = "postgres://{user}:{password}@{host}:{port}/{database}".format(
+        user=os.getenv('DB_USER', 'root'),
+        password=password,
+        host=os.getenv('DB_HOST', 'localhost'),
+        port=os.getenv('DB_PORT', '5432'),
+        database=os.getenv('DB_DATABASE'),
+    )

@@ -1,6 +1,6 @@
 import os
 
-from config.database import database, test_database
+from .database import DATABASE_URL, TEST_DATABASE_URL
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__name__))
@@ -25,7 +25,8 @@ class DevelopmentConfig(Config):
     MAIL_USE_SSL = bool(os.getenv('MAIL_USE_SSL', False))
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER')
 
-    ORATOR_DATABASES = database
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
     RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
@@ -37,7 +38,10 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = False
     TESTING = True
-    ORATOR_DATABASES = test_database
+
+    SQLALCHEMY_DATABASE_URI = TEST_DATABASE_URL
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
     RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
     REDIS_HOST = os.getenv('REDIS_HOST')
@@ -47,4 +51,6 @@ class TestingConfig(Config):
 # create the production config
 class ProductionConfig(Config):
     DEBUG = False
-    ORATOR_DATABASES = database
+
+    SQLALCHEMY_DATABASE_URI = DATABASE_URL
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

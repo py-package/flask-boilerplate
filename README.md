@@ -5,7 +5,9 @@ A production-grade flask application that you can start your projects without he
 
 **Features**
 - [x] Factory Pattern
-- [x] Orator ORM module
+- [x] SQLAlchemy ORM
+- [x] Flask-Migrate for database migrations
+- [x] Flask-Seeder for database seed
 - [x] Celery for background jobs
 - [x] Managed Routing using Blueprints
 - [x] Data and Route Caching using Flask-Cache
@@ -28,10 +30,13 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # migrate database
-python db.py migrate
+flask db upgrade
+
+# rollback database migrations
+flask db downgrade
 
 # run database seeder, this will setup default admin credentials for our backend
-python db.py db:seed
+python seed run
 ```
 
 **Running Application**
@@ -43,7 +48,7 @@ You can run application using multiple methods:
 python wsgi.py
 
 # gunicorn server
-gunicorn -w 4 wsgi:server -t 90 0.0.0.0:5000 --reload
+gunicorn -w 4 wsgi:app -t 90 0.0.0.0:5000 --reload
 
 # using sh
 ./run
@@ -55,16 +60,13 @@ This application uses orator orm. You can find details **[here](https://orator-o
 
 ```sh
 # Creating migration
-python db.py make:migration create_users_table --create --table=users
+flask db migrate -m "migration_message_here"
 
 # Run migration
-python db.py migrate
+flask db upgrade
 
 # Rollback migration
-python db.py migrate:rollback
-
-# For more details run:
-python db.py
+flask db downgrade
 ```
 
 **Celery**

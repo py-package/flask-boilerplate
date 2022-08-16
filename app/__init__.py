@@ -1,14 +1,18 @@
-from config import DevelopmentConfig, TestingConfig
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_seeder import FlaskSeeder
 from flask_mail import Mail
-from flask_orator import Orator
-from celery import Celery
-from flask_caching import Cache
-from depot.manager import DepotManager
 from flask_login import LoginManager
+from flask_caching import Cache
+from celery import Celery
+from depot.manager import DepotManager
+from config import DevelopmentConfig, TestingConfig
 
 mail = Mail()
-db = Orator()
+db = SQLAlchemy()
+migrate = Migrate()
+seeder = FlaskSeeder()
 celery = Celery(__name__, broker=DevelopmentConfig.CELERY_BROKER_URL, result_backend=DevelopmentConfig.RESULT_BACKEND)
 cache = Cache()
 login_manager = LoginManager()
@@ -18,9 +22,8 @@ DepotManager.configure(name='default', config={
 }, prefix='depot.')
 
 
-def factory(config=DevelopmentConfig) -> Flask:
+def factory(config=DevelopmentConfig):
     app = Flask(__name__)
-
     app.template_folder = 'views'
 
     # load application configuration from config
@@ -40,6 +43,8 @@ def factory(config=DevelopmentConfig) -> Flask:
     # initialize database
     db.init_app(app)
     db.app = app
+    migrate.init_app(app, db)
+    seeder.init_app(app, db)
 
     # initialize login_manager
     register_login_manager(app)
@@ -71,7 +76,8 @@ def register_login_manager(app):
     @login_manager.user_loader
     def load_user(user_id):
         from app.models.User import User
-        return User.find(user_id)
+
+        return User.query.get(int(user_id))
 
 
 def register_blueprints(app):
